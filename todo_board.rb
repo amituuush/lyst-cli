@@ -12,46 +12,44 @@ class TodoBoard
 
   def get_command
     print "\nEnter a command: "
-    cmd, *args = gets.chomp.split(" ")
+    cmd, label, *args = gets.chomp.split(" ")
 
     case cmd
     when "mklist", "ml"
-      make_list(*args.first)
+      make_list(label)
     when "ls"
       @lists.keys.each { |key| print "#{key} " }
     when "mktodo", "mt"
-      label, *rest = args
       if @lists.key?(label)
-        @lists[label].add_item(*rest) ? true : p("invalid date format, must be yyyy-mm-dd")
+        @lists[label].add_item(*args) ? true : p("invalid date format, must be yyyy-mm-dd")
       else
         p("list does not exist")
       end
     when "showall", "sa"
       @lists.values.each { |list| list.print }
     when "toggle", "t"
-      label, *index = args
-      @lists[label].toggle_item(index.first.to_i)
+      @lists[label].toggle_item(args.first.to_i)
     when "rm"
-      label, *index = args
-      @lists[label].remove_item(index.first.to_i)
+      @lists[label].remove_item(args.first.to_i)
     when "purge"
-      label, *rest = args
       @lists[label].purge
     when "swap"
-      label, index_1, index_2 = args
+      index_1, index_2 = args
       @lists[label].swap(index_1.to_i, index_2.to_i)
     when "sort"
-      label, *rest = args
       @lists[label].sort_by_date!
     when "priority"
-      label, *rest = args
       @lists[label].print_priority
     when "print" || "p"
-      return false if args.empty?
-      label, *indices = args
-      indices.empty? ? @lists[label].print : @lists[label].print_full_item(indices.first.to_i)
-    when "quit"
+      if label.nil?
+        p "please enter a label to print along with an optional index"
+      else
+        args.empty? ? @lists[label].print : @lists[label].print_full_item(args.first.to_i)
+      end
+    when "quit", "q"
       return false
+    when "help", "h"
+      help
     else
       print "Sorry, that command is not recognized."
       true
@@ -63,6 +61,84 @@ class TodoBoard
       break if !get_command
     end
   end
+
+  def help
+    puts "
+    Thanks for trying out Lyst CLI!
+    Below is a list of available commands: \n
+    mklist <new_list_label>
+      - make a new list with the given label
+      - alias: ml \n
+    ls
+      - print the labels of all lists \n
+    showall
+      - print all lists
+       - alias: sa \n
+    mktodo <list_label> <item_title> <item_deadline> <optional_item_description>
+      - add a new item to the specified list with the given information
+      - alias: mt \n
+    toggle <list_label> <item_index>
+      - toggle 'done' for the specified item on the given list
+      - alias: t \n
+    rm <list_label> <item_index>
+      - remove the specified item on the given list \n
+    purge <list_label>
+      - remove all 'done' items on the given list \n
+    up <list_label> <item_index> <optional_amount>
+      - move the specified item higher on the given list \n
+    down <list_label> <item_index> <optional_amount>
+      - move the specified item higher on the given list \n
+    swap <list_label> <item_index_1> <item_index_2>
+      - swap the positions of the specified items on the given list \n
+    sort <list_label>
+      - sort the given list by deadline \n
+    priority <list_label>
+      - print the all information for the item at the top of the given list \n
+    print <list_label> <optional_index>
+      - print all items of the given list if index is not provided
+      - print the specific item of the given list if index is provided
+      - alias: p \n
+    quit
+      - exit program
+      - alias: q
+    help
+      - show current list of commands
+      - alias: h
+      "
+  end
+  # def help
+  #   p "Thanks for trying out Lyst CLI!"
+  #   p "Below is a list of available commands:"
+  #   p "mklist <new_list_label>"
+  #   p "make a new list with the given label\n"
+  #   p "ls"
+  #   p "print the labels of all lists\n"
+  #   p "showall"
+  #   p "print all lists\n"
+  #   p "mktodo <list_label> <item_title> <item_deadline> <optional_item_description>"
+  #   p "add a new item to the specified list with the given information\n"
+  #   p "toggle <list_label> <item_index>"
+  #   p "toggle 'done' for the specified item on the given list\n"
+  #   p "rm <list_label> <item_index>"
+  #   p "remove the specified item on the given list\n"
+  #   p "purge <list_label>"
+  #   p "remove all 'done' items on the given list\n"
+  #   p "up <list_label> <item_index> <optional_amount>"
+  #   p "move the specified item higher on the given list\n"
+  #   p "down <list_label> <item_index> <optional_amount>"
+  #   p "move the specified item higher on the given list"
+  #   p "swap <list_label> <item_index_1> <item_index_2>"
+  #   p "swap the positions of the specified items on the given list"
+  #   p "sort <list_label>"
+  #   p "sort the given list by deadline"
+  #   p "priority <list_label>"
+  #   p "print the all information for the item at the top of the given list"
+  #   p "print <list_label> <optional_index>"
+  #   p "print all items of the given list if index is not provided"
+  #   p "print the specific item of the given list if index is provided"
+  #   p "quit"
+  #   p "exit program"
+  # end
 end
 
 todo_board = TodoBoard.new
