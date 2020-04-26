@@ -2,8 +2,12 @@ require_relative "list"
 require "byebug"
 
 class TodoBoard
-  def initialize(label)
-    @list = List.new(label)
+  def initialize
+    @lists = {}
+  end
+
+  def make_list(label)
+    @lists[label] = List.new(label)
   end
 
   def get_command
@@ -11,27 +15,46 @@ class TodoBoard
     cmd, *args = gets.chomp.split(" ")
 
     case cmd
-    when "mktodo"
-      unless @list.add_item(*args)
-        p "invalid date format, must be yyyy-mm-dd"
+    when "mklist", "ml"
+      make_list(*args.first)
+    when "ls"
+      @lists.keys.each { |key| print "#{key} " }
+    when "mktodo", "mt"
+      label, *rest = args
+      if @lists.key?(label)
+        @lists[label].add_item(*rest) ? true : p("invalid date format, must be yyyy-mm-dd")
       else
-        true
+        p("list does not exist")
       end
+    when "showall", "sa"
+      @lists.values.each { |list| list.print }
+    when "toggle", "t"
+      label, *index = args
+      @lists[label].toggle_item(index.first.to_i)
+    when "rm"
+      label, *index = args
+      @lists[label].remove_item(index.first.to_i)
+    when "purge"
+      label, *rest = args
+      @lists[label].purge
     when "swap"
-      @list.swap(*args.map(&:to_i))
+      label, index_1, index_2 = args
+      @lists[label].swap(index_1.to_i, index_2.to_i)
     when "sort"
-      @list.sort_by_date!
+      label, *rest = args
+      @lists[label].sort_by_date!
     when "priority"
-      @list.print_priority
-    when "print"
-      args.empty? ? @list.print : @list.print_full_item(*args.first.to_i)
-    when "toggle"
-      @list.toggle_item(*args.first.to_i)
+      label, *rest = args
+      @lists[label].print_priority
+    when "print" || "p"
+      return false if args.empty?
+      label, *indices = args
+      indices.empty? ? @lists[label].print : @lists[label].print_full_item(indices.first.to_i)
     when "quit"
-        return false
+      return false
     else
-        print "Sorry, that command is not recognized."
-        true
+      print "Sorry, that command is not recognized."
+      true
     end
   end
 
@@ -41,3 +64,6 @@ class TodoBoard
     end
   end
 end
+
+todo_board = TodoBoard.new
+todo_board.run

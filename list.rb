@@ -46,6 +46,7 @@ class List
       p "#{i}".ljust(6) + "| #{item.title}".ljust(15) + "| #{item.deadline}".ljust(15) + "| #{item.done}"
     end
     p "-------------------------------------------"
+    p "==========================================="
   end
 
   def print_full_item(index)
@@ -66,5 +67,18 @@ class List
 
   def toggle_item(index)
     @items[index].toggle
+  end
+
+  def remove_item(index)
+    if valid_index?(index)
+      @items.delete_at(index)
+      true
+    else
+      false
+    end
+  end
+
+  def purge
+    @items.select! { |item| !item.done }
   end
 end
