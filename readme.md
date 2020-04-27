@@ -28,12 +28,6 @@
     purge <list_label>
       - remove all 'done' items on the given list
 
-    up <list_label> <item_index> <optional_amount>
-      - move the specified item higher on the given list
-
-    down <list_label> <item_index> <optional_amount>
-      - move the specified item higher on the given list
-
     swap <list_label> <item_index_1> <item_index_2>
       - swap the positions of the specified items on the given list
 
