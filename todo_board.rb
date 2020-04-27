@@ -106,39 +106,6 @@ class TodoBoard
       - alias: h
       "
   end
-  # def help
-  #   p "Thanks for trying out Lyst CLI!"
-  #   p "Below is a list of available commands:"
-  #   p "mklist <new_list_label>"
-  #   p "make a new list with the given label\n"
-  #   p "ls"
-  #   p "print the labels of all lists\n"
-  #   p "showall"
-  #   p "print all lists\n"
-  #   p "mktodo <list_label> <item_title> <item_deadline> <optional_item_description>"
-  #   p "add a new item to the specified list with the given information\n"
-  #   p "toggle <list_label> <item_index>"
-  #   p "toggle 'done' for the specified item on the given list\n"
-  #   p "rm <list_label> <item_index>"
-  #   p "remove the specified item on the given list\n"
-  #   p "purge <list_label>"
-  #   p "remove all 'done' items on the given list\n"
-  #   p "up <list_label> <item_index> <optional_amount>"
-  #   p "move the specified item higher on the given list\n"
-  #   p "down <list_label> <item_index> <optional_amount>"
-  #   p "move the specified item higher on the given list"
-  #   p "swap <list_label> <item_index_1> <item_index_2>"
-  #   p "swap the positions of the specified items on the given list"
-  #   p "sort <list_label>"
-  #   p "sort the given list by deadline"
-  #   p "priority <list_label>"
-  #   p "print the all information for the item at the top of the given list"
-  #   p "print <list_label> <optional_index>"
-  #   p "print all items of the given list if index is not provided"
-  #   p "print the specific item of the given list if index is provided"
-  #   p "quit"
-  #   p "exit program"
-  # end
 end
 
 todo_board = TodoBoard.new
